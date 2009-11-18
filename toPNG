@@ -1,0 +1,1 @@
+for f in *.out; do mv $f `basename $f .out`.png; done;
