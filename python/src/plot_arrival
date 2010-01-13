@@ -1,0 +1,29 @@
+ set terminal x11
+#plot "queue.gplot" u 1:2:3 t "reinforcement" with yerrorbars, u 1:2:3 t "reinforcement" with l
+
+# set rmargin 0 
+# set lmargin 0 
+set tmargin 2
+# set bmargin 0 
+
+set multiplot
+set origin 0, 0.5
+set size 1, 0.5
+set grid
+
+set title "Arrival"
+plot "queue.gplot" u 1:8 	t "queue 1" with l \
+	 , "queue.gplot" u 1:18 t "queue 2" with l \
+	 , "queue.gplot" u 1:28 t "queue 3" with l 
+
+set origin 0.0 , 0 
+set size 1, 0.5
+set title "Service"
+plot "queue.gplot" u 1:10 t "queue 1" with l, \
+	 "queue.gplot" u 1:20 t "queue 2" with l, \
+	 "queue.gplot" u 1:30 t "queue 3" with l
+
+set nomultiplot
+
+#pause -1
+

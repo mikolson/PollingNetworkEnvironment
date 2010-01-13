@@ -1,0 +1,48 @@
+set terminal x11
+#plot "queue.gplot" u 1:2:3 t "reinforcement" with yerrorbars, u 1:2:3 t "reinforcement" with l
+
+set grid
+# set rmargin 0 
+# set lmargin 0 
+set tmargin 2
+# set bmargin 0 
+
+set multiplot
+set origin 0, 0.66
+set size 1, 0.33
+
+set title "Average waiting time"
+plot "queue.gplot" u 1:2 t "queue 1" with l \
+	 , "queue.gplot" u 1:12 t "queue 2" with l \
+	 , "queue.gplot" u 1:22 t "queue 3" with l 
+#	  , "queue.gplot" u 1:2:3 t "queue 1" with yerrorbars
+	  #, "queue.gplot" u 1:11 t "queue 2" with l, "queue.gplot" u 1:21 t "queue 3" with l 
+
+set origin 0, 0.33
+set size 1, 0.33
+set title "Waiting time"
+plot "queue.gplot" u 1:4 t "queue 1" with l \
+	 , "queue.gplot" u 1:14 t "queue 2" with l \
+	 , "queue.gplot" u 1:24 t "queue 3" with l  
+#	, "queue.gplot" u 1:4:5 t "queue 1" with yerrorbars, \
+	#, "queue.gplot" u 1:11 t "queue 2" with l, "queue.gplot" u 1:21 t "queue 3" with l 
+
+set origin 0.0 , 0 
+set size 1, 0.33
+set title "Queue length"
+plot "queue.gplot" u 1:6 t "queue 1" with l, \
+	 "queue.gplot" u 1:16 t "queue 2" with l, \
+	 "queue.gplot" u 1:26 t "queue 3" with l
+#		, "queue.gplot" u 1:6:7 t "queue 1" with yerrorbars, \
+  
+
+	 	 
+# plot "queue.gplot" u 1:($2*$3/100.0) with l #, "queue.gplot" u 1:11 t "queue 2" with l, "queue.gplot" u 1:21 t "queue 3" with l 
+
+
+
+
+set nomultiplot
+
+#pause -1
+
