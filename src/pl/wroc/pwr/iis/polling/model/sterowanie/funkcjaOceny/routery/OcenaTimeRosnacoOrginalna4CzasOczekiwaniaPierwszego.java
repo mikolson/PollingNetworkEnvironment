@@ -21,7 +21,7 @@ public class OcenaTimeRosnacoOrginalna4CzasOczekiwaniaPierwszego extends OcenaSy
 
 	private int[] poprzedniStan = new int[0];
 
-	private float maxR = 10000;
+	private double maxR = 10000;
 	private final float c4;
 	
 	public OcenaTimeRosnacoOrginalna4CzasOczekiwaniaPierwszego(float C1, float C2, float C3, float C4) {
@@ -35,15 +35,15 @@ public class OcenaTimeRosnacoOrginalna4CzasOczekiwaniaPierwszego extends OcenaSy
 	 * Średnia ważona ilości zgłoszeń
 	 * @see pl.wroc.pwr.iis.polling.model.ocena.ModulOceniajacy#ocenaSytuacji(pl.wroc.pwr.iis.polling.model.object.Serwer)
 	 */
-	public float ocenaSytuacji(Serwer serwer) {
+	public double ocenaSytuacji(Serwer serwer) {
 		float r_time = 0;
 		for (int i = 0; i < serwer.getIloscKolejek()-1; i++) {
 			Kolejka kolejka = serwer.getKolejka(i);
 			
 			double r_time_i = 0; 
-			int R =  kolejka.getMaxCzasOczekiwania();
-			float M = kolejka.getSredniCzasOczekiwania();
-//			float M = kolejka.getCzasOczekiwania();
+			double R =  kolejka.getMaxCzasOczekiwania();
+//			float M = kolejka.getSredniCzasOczekiwania();
+			double M = kolejka.getCzasOczekiwania();
 			
 			if(M <= R) {
 				r_time_i = c1 * M / (-3.0 * R * R) + 4.0/3.0*c1;
@@ -56,11 +56,12 @@ public class OcenaTimeRosnacoOrginalna4CzasOczekiwaniaPierwszego extends OcenaSy
 			r_time += r_time_i * W;
 		}
 		Kolejka kolejka = serwer.getKolejka(serwer.getIloscKolejek()-1);
-		float Mr = kolejka.getSredniCzasOczekiwania();
-//		float Mr = kolejka.getCzasOczekiwania();
+//		float Mr = kolejka.getSredniCzasOczekiwania();
+		double Mr = kolejka.getCzasOczekiwania();
 		
 		maxR = Math.max(Mr, maxR);
-		float M = kolejka.getSredniCzasOczekiwania();
+//		float M = kolejka.getSredniCzasOczekiwania();
+		double M = kolejka.getCzasOczekiwania();
 		
 //		double d = ((-c4*M/maxR) + c4);
 		double d = -M/(float)c4;

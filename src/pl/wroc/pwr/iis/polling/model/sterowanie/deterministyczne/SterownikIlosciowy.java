@@ -17,7 +17,7 @@ public class SterownikIlosciowy extends Sterownik {
 	
 	
 	@Override
-	public int getDecyzjaSterujaca(float ocenaStanu, int[] stan, int iloscAkcji) {
+	public int getDecyzjaSterujaca(double ocenaStanu, int[] stan, int iloscAkcji) {
 		int akcja = (ostatniaAkcja++) % iloscAkcji;
 		return akcja;
 	}

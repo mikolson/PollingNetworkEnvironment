@@ -2,20 +2,22 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package pl.wroc.pwr.iis.rozklady;
+package pl.wroc.pwr.iis.rozklady.dyskretne;
+
+import pl.wroc.pwr.iis.rozklady.IRozkladDyskretny;
 
 
 /**
  * @author Misiek
  */
-public class RozkladJednostajny implements IRozkladPrawdopodobienstwa {
+public class RozkladJednostajnyDyskretny implements IRozkladDyskretny {
 
     private int wartosc;
 
-    public RozkladJednostajny() {
+    public RozkladJednostajnyDyskretny() {
     }
 
-    public RozkladJednostajny(int wartosc) {
+    public RozkladJednostajnyDyskretny(int wartosc) {
         setWartosc(wartosc);
     }
     
@@ -26,4 +28,9 @@ public class RozkladJednostajny implements IRozkladPrawdopodobienstwa {
     public int losuj() {
         return wartosc;
     }
+
+	@Override
+	public int losuj(double kwantCzasu) {
+		return wartosc;
+	}
 }

@@ -37,8 +37,8 @@ public class RandomGenerator {
         return random.gaussian();
     }
     
-    public int nextInt(int n) {
-        return random.choose(n);
+    public int nextInt(int hi) {
+        return random.choose(hi);
     }
     
     public boolean nextBoolean() {

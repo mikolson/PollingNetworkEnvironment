@@ -14,7 +14,7 @@ public class OcenaCzasuOczekiwania extends OcenaSytuacji_A implements FunkcjaOce
 	 * Średnia ważona ilości zgłoszeń
 	 * @see pl.wroc.pwr.iis.polling.model.ocena.ModulOceniajacy#ocenaSytuacji(pl.wroc.pwr.iis.polling.model.object.Serwer)
 	 */
-	public float ocenaSytuacji(Serwer serwer) {
+	public double ocenaSytuacji(Serwer serwer) {
 		float result = 0;
 		float wagi = 0;
 		

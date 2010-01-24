@@ -9,9 +9,8 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.funkcjaWartosci.FunkcjaWartosciA
 import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Sterownik;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 
-
 /**
- * @author Misiek
+ * @author Michał Stanek <michal.stanek@pwr.wroc.pl>
  */
 public class QLearningWariancja extends Sterownik {
 	protected float temperatureShake = 0.5f;
@@ -19,10 +18,8 @@ public class QLearningWariancja extends Sterownik {
 	protected float alfaShake = 0.01f;
 	protected int STATYSTYCZNY_PROG_ILOSCI_POMIAROW = 30;
 	
-	protected float granicaOdchylenia = 3.5f;
-//	protected float granicaOdchylenia = 5.0f;
+	protected float granicaOdchylenia = 3.0f;
 	private static final boolean ZAZNACZ_SHAKE = true;
-//	private static final boolean ZAZNACZ_SHAKE = false;
 	
     /**
      * Tablica zawierajaca wartosci Q(x,a)
@@ -58,11 +55,11 @@ public class QLearningWariancja extends Sterownik {
 	}
 
 	@Override
-	public int getDecyzjaSterujaca(float ocenaStanu, int[] stan, int iloscAkcji) {
+	public int getDecyzjaSterujaca(double ocenaStanu, int[] stan, int iloscAkcji) {
 		final int aktualnyStan = strategia.getNumerStanu(stan);
 		final int prevStan 	   = strategia.getOstatniStan();
 		final int prevAkcja    = strategia.getOstatniaAkcja();
-		final float r 		   = ocenaStanu;
+		final double r 		   = ocenaStanu;
 		
 		this.shake = false;
 		/*
@@ -74,20 +71,19 @@ public class QLearningWariancja extends Sterownik {
 			 
 			 if (czyZrobicShake(Q, prevStan, prevAkcja, r)) {
 				zrobShake(alfaShake, dyskontShake, temperatureShake);
-				Q.wyczyscObserwacje(prevStan, prevAkcja);
-//				Q.wyczyscObserwacje();
+				Q.wyczyscObserwacje(prevStan, prevAkcja); //Czyści: Srednia obserwacji, Średnią kwadratów obserwacji, ilosc odwiedzin  
 			 } else {
-				poprawParametry(Q);
+//				poprawParametry(Q); // Ustawia ALPHA + DYSKONT
 			 }
 
 			 Q.poprawObserwacje(prevStan,prevAkcja,r);
 			 // Max wartosc Q w biezacym stanie
 	
 //			 float Q_s_a = Q.getWartosc(prevStan, prevAkcja);
-			 float maxQ_sn_a = Q.getMaxAkcja(aktualnyStan, iloscAkcji).wartosc;
+			 double maxQ_sn_a = Q.getMaxAkcja(aktualnyStan, iloscAkcji).wartosc;
 //			 float alfa = Math.max(1/(Q.incPoprawki(prevStan, prevAkcja)+1), this.alfa);
 //			 float nowaWartoscQ = Q_s_a + alfa * (r + currentDyskont * maxQ_sn_a - Q_s_a);
-			 float nowaWartoscQ = r + currentDyskont * maxQ_sn_a;	 
+			 double nowaWartoscQ = r + currentDyskont * maxQ_sn_a;	 
 			 // Ustawienie nowej wartośći akcji
 			 Q.poprawWartosc(prevStan, prevAkcja, nowaWartoscQ);
 //			 Q.setWartosc(prevStan, prevAkcja, nowaWartoscQ);
@@ -125,10 +121,9 @@ public class QLearningWariancja extends Sterownik {
 	 * @return Sprawdza czy odleglosc aktualnej obserwacji od odchylenia standardowego jest odpowiednio mała. Dodatkowo 
 	 * sprawdza rownież czy liczba obserwacji jest tez dostateczna aby zrobic takie porownanie
 	 */
-	protected boolean czyZrobicShake(FunkcjaWartosciAkcji Q, int stan, int akcja, float aktualnaObserwacja) {
+	protected boolean czyZrobicShake(FunkcjaWartosciAkcji Q, int stan, int akcja, double aktualnaObserwacja) {
 		boolean ret = false;
-		if (odlegloscObserwacjiOdGranicy(Q, stan, akcja, aktualnaObserwacja) > 0) 
-		{
+		if (odlegloscObserwacjiOdGranicy(Q, stan, akcja, aktualnaObserwacja) > 0) {
 			Q.wyczyscObserwacje(stan, akcja);
 			ret = true;
 		}
@@ -138,15 +133,15 @@ public class QLearningWariancja extends Sterownik {
 	/**
 	 * @return Odległość Obserwacji od progu wyznaczonego przez przemnozenie odchylenia standardowego przez czynnik (najczęściej > 3)
 	 */
-	protected float odlegloscObserwacjiOdGranicy(FunkcjaWartosciAkcji Q, int stan, int akcja, float aktualnaObserwacja) {
-		float ret = 0;
+	protected double odlegloscObserwacjiOdGranicy(FunkcjaWartosciAkcji Q, int stan, int akcja, double aktualnaObserwacja) {
+		double ret = 0;
 		if (Q.getIloscObserwacji(stan, akcja) > STATYSTYCZNY_PROG_ILOSCI_POMIAROW && strategia.czyStabilna()) {
 			ret = Math.max(0, odlegloscObserwacji(Q, stan, akcja, aktualnaObserwacja) - granicaOdchylenia * Q.getOdchylenieStandardoweObserwacji(stan, akcja));
 		}
 		return ret;
 	}
 
-	protected float odlegloscObserwacji(FunkcjaWartosciAkcji Q, int stan, int akcja, float aktualnaObserwacja) {
+	protected double odlegloscObserwacji(FunkcjaWartosciAkcji Q, int stan, int akcja, double aktualnaObserwacja) {
 		return Math.abs(Q.getSredniaObserwacji(stan, akcja)-aktualnaObserwacja);
 	}
 	

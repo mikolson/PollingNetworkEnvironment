@@ -6,6 +6,7 @@
 
 package pl.wroc.pwr.iis.rozklady;
 
-public interface IRozkladPrawdopodobienstwa {
+public interface IRozkladDyskretny {
     int losuj();
+    int losuj(double kwantCzasu);
 }

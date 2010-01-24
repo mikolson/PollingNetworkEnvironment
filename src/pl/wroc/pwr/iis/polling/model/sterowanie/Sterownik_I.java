@@ -5,8 +5,13 @@ public interface Sterownik_I {
 	int startSterowania();
 	int koniecSterowania();
 	
-	int getDecyzjaSterujaca(float ocenaStanu, int[] stan, int iloscAkcji);
-	
+	/**
+	 * @return Zwraca w jakich punktach następuje decyzja sterująca 
+	 * 			czy po obsłużeniu kolejki, czy po obsłużeniu zadania, czy
+	 * 			po wykorzystaniu czasu przetwarzania 
+	 */
+	public ZdarzenieKolejki getDecyzjaNaZdarzenie();
+	int getDecyzjaSterujaca(double ocenaStanu, int[] stan, int iloscAkcji);
 	
 	/**
 	 * @return Metoda ma za zadanie zwracać true jeżeli sterownik podjął decyzję o zmianie parametrów pracy.
@@ -14,4 +19,7 @@ public interface Sterownik_I {
 	 * sterownik "stwierdzi", że warunki pracy zasadniczo odbiegają od normy
 	 */
 	public boolean bylShake();
+	
+	String toStringHeader();
+	String toString();
 }

@@ -34,6 +34,9 @@ public class Losuj {
 			}
 		} else {
 			System.err.println("Losowanie nie moze sie odbyc powniewaz suma prawdopodobieństwa nie jest rowna 1: " + suma);
+			for (double d : elementy) {
+				System.out.println(d + ", ");
+			}
 		}
 		
 		return result;

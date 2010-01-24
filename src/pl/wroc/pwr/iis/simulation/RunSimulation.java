@@ -12,8 +12,9 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.funkcjaOceny.OcenaIlosciZgloszen
 import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Sterownik;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaEZachlanna;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
-import pl.wroc.pwr.iis.rozklady.RozkladRownomierny;
+import pl.wroc.pwr.iis.rozklady.ciagle.RozkladJednostajnyCiagly;
+import pl.wroc.pwr.iis.rozklady.ciagle.RozkladWykladniczy;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladPoissona;
 
 /**
  *
@@ -27,11 +28,10 @@ public class RunSimulation {
     	
     	serwer1.setMaxZgloszen(150);
     	serwer1.setMaxCzasOczekiwania(200);
+    	serwer1.setRozkladCzasuObslugi(new RozkladWykladniczy(1));
     	
-    	serwer1.setRozkladIlosciObslug(new RozkladRownomierny(0,3));
-    	serwer1.setRozkladIlosciPrzybyc(new RozkladRownomierny(0,3));
-//        serwer1.setRozkladIlosciPrzybyc(new RozkladJednostajny(1));
-    	serwer1.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwer1.setRozkladIlosciPrzybyc(new RozkladPoissona(1));
+    	serwer1.setRozkladCzasuNastawy(new RozkladJednostajnyCiagly(0));
 //    	serwer1.setWagi(new float[]{4,0.1f});
     	
 	   	FunkcjaOceny_I fOceny = new OcenaIlosciZgloszen(1000);
@@ -51,7 +51,7 @@ public class RunSimulation {
     		
     		
     		for (int i = 0; i < 1000; i++) {
-    			serwer1.wykonajCyklSymulacji();
+    			serwer1.wykonajCyklSymulacji(0.1);
     		}
     		sterownik.koniecSterowania();
 		}

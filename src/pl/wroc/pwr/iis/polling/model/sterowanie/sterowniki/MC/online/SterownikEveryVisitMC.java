@@ -12,7 +12,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 
 
 /**
- * @author Misiek
+ * @author Michał Stanek
  */
 public class SterownikEveryVisitMC extends Sterownik {
 	private class StanAkcja {
@@ -26,7 +26,7 @@ public class SterownikEveryVisitMC extends Sterownik {
 	}
 	
 	/** Wartosci nagrod jakie system uzyskal */
-	ArrayList<Float> nagrody = new ArrayList<Float>();
+	ArrayList<Double> nagrody = new ArrayList<Double>();
 	
 	/** Numery stanow w jakich znalazl sie system */
 	ArrayList<StanAkcja> stany = new ArrayList<StanAkcja>();
@@ -36,7 +36,7 @@ public class SterownikEveryVisitMC extends Sterownik {
 	}
 
 	@Override
-	public int getDecyzjaSterujaca(float ocenaStanu, int[] stan, int iloscAkcji) {
+	public int getDecyzjaSterujaca(double ocenaStanu, int[] stan, int iloscAkcji) {
 		int akcja = strategia.getAkcja(stan, iloscAkcji);
 		int numerStanu = strategia.getNumerStanu(stan);
 		

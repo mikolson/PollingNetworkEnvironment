@@ -6,22 +6,21 @@ import pl.wroc.pwr.iis.rozklady.random.RandomGenerator;
 public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	public class Akcja {
 		public int numer;
-		public float wartosc;
+		public double wartosc;
 	}
 	
 	protected float min_poprawa = 0.001f;
 	
 	// Tablice potrzebne do przechowywania klasycznej Q-funkcji
-	protected float[][] wartosci; 	// Wartosci Q(s,a)
+	protected double[][] wartosci; 	// Wartosci Q(s,a)
 	protected int[][]   poprawki; 	// Wartosc N(s,a) - ilosc modyfikacji Q(s,a)
 	protected int akcji; 			// |A| - ilosc mozliwych do wykonania akcji 
 	
 	// Wartości potrzebne do śledzenia odchylenia standardowego wynikow
-	protected float[][] sredniaObserwacji; 	// Srednia wzmocnien w danym stanie
-	protected float[][] sredniaKwadratowObserwacji;  // 
-	protected int[][]   poprawkiObserwacji; // Wartosc N(s,a) - ilosc modyfikacji Q(s,a)
+	protected double[][] sredniaObserwacji; 			// Srednia wzmocnien w danym stanie
+	protected double[][] sredniaKwadratowObserwacji; // 
+	protected int[][]   poprawkiObserwacji; 		// Wartosc N(s,a) - ilosc modyfikacji Q(s,a)
 
-	
 	public FunkcjaWartosciAkcji(int maxStanow, int akcji, int min_poprawa) {
 		this(maxStanow, akcji);
 		this.min_poprawa = min_poprawa;
@@ -29,14 +28,13 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	
 	public FunkcjaWartosciAkcji(int maxStanow, int akcji) {
 		super();
-		System.out.println("FunkcjaWartosciAkcji.FunkcjaWartosciAkcji(): " + maxStanow);
-		wartosci = new float[maxStanow][akcji];
+		wartosci = new double[maxStanow][akcji];
 		poprawki = new int[maxStanow][akcji];
 		this.akcji = akcji;
 		
 		// inicjalizacja wartosci dla odchylen standardowych i sredniej z obserwacji
-		sredniaObserwacji 		   = new float[maxStanow][akcji];
-		sredniaKwadratowObserwacji = new float[maxStanow][akcji];
+		sredniaObserwacji 		   = new double[maxStanow][akcji];
+		sredniaKwadratowObserwacji = new double[maxStanow][akcji];
 		poprawkiObserwacji 		   = new int[maxStanow][akcji];
 	}
 	
@@ -61,7 +59,6 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
             }
 		}
 	}
-
 	
 	/**
 	 * Zwraca akcje dajaca minimalne wzocnienie dla danego stanu S
@@ -72,7 +69,7 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 		System.out.println("FunkcjaWartosciAkcji.getMinAkcja():" + iloscAkcji);
 		Akcja result = new Akcja();
 		
-		float min = Float.MAX_VALUE;
+		double min = Integer.MAX_VALUE;
 		for (int i = 0; i < iloscAkcji; i++) {
 			System.out.println("FunkcjaWartosciAkcji.getMinAkcja():" + i);
 			if (wartosci[stan][i] < min) {
@@ -91,8 +88,7 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 */
 	public Akcja getMaxAkcja(int stan, int iloscAkcji) {
 		Akcja result = new Akcja();
-		
-		float max = Float.MIN_VALUE;
+		double max = Integer.MIN_VALUE;
 		for (int i = 0; i < iloscAkcji; i++) {
 			if (wartosci[stan][i] > max) {
 				result.numer = i;
@@ -101,7 +97,7 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 			}
 		}
 		
-//		System.out.println("MAX akcja:" + result.wartosc);
+//		System.out.println("MAX akcja:" + result.wartosc + "(Stan: " + stan + ", il. akcji: " + iloscAkcji +")");
 		return result; 
 	}
 	
@@ -116,7 +112,7 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 * @param wartosc Wzmocnienie uzyskane w procesie symulacji
 	 * @return Nowa wartosc Q(s,a) = suma(Q(s,a))/ilosc
 	 */
-	public float poprawWartosc(int stan, int akcja, float wartosc) {
+	public double poprawWartosc(int stan, int akcja, double wartosc) {
 		poprawki[stan][akcja]++;
 		return poprawWartosc(stan, akcja, wartosc, Math.max(1/(float)(poprawki[stan][akcja]), min_poprawa));  
 	}
@@ -138,16 +134,26 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 * @param obserwacja Wzmocnienie uzyskane w tym stanie
 	 * @return 
 	 */
-	public float poprawObserwacje(int stan, int akcja, float obserwacja) {
-		poprawkiObserwacji[stan][akcja]++;
-		float wspZmiany = Math.max(1/(float)(poprawkiObserwacji[stan][akcja]), min_poprawa);
+	public double poprawObserwacje(int stan, int akcja, double obserwacja) {
+		poprawkiObserwacji[stan][akcja]++; // Ilość odwiedzin stanu
+		
+		// Ten współczynnik zachowywał się dobrze do momentu stosowania funkcji z brakiem detekcji anomalii
+		// 
+		double wspZmiany = Math.max(1/(double)(poprawkiObserwacji[stan][akcja]), min_poprawa);
+		
+		//
+		//wspZmiany = min_poprawa;
+		//wspZmiany = 1/(float)(poprawkiObserwacji[stan][akcja]);
+		
+		
+		poprawSredniaKwadratow(stan, akcja, obserwacja);
 		return poprawSrednia(stan, akcja, obserwacja, wspZmiany);
 	}
 	
 	/**
 	 * Podaje średnią z obserwacji wzmocnień w danym stanie
 	 */
-	public float getSredniaObserwacji(int stan, int akcja) {
+	public double getSredniaObserwacji(int stan, int akcja) {
 		return sredniaObserwacji[stan][akcja];
 	}
 	
@@ -175,16 +181,26 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 * Poprawia wartosc Q(funkcji wartości akcji) stosujac przy tym wspolczynnik zmiany.
 	 * Aby poprawić średnią wartość obserwacji w danym stanie należy wywołać metodę poprawSrednia
 	 */
-	public float poprawWartosc(int stan, int akcja, float wartosc, float wspolczynnikZmiany) {
+	public double poprawWartosc(int stan, int akcja, double wartosc, double wspolczynnikZmiany) {
 		return (wartosci[stan][akcja] = poprawIteracyjnie(wartosci[stan][akcja], wartosc, wspolczynnikZmiany));
 	}
 	
 	/**
 	 * Poprawia średnią wartość dla obserwacji w danym stanie.
 	 */
-	public float poprawSrednia(int stan, int akcja, float wzmocnienie, float wspolczynnikZmiany ) {
-		sredniaKwadratowObserwacji[stan][akcja] = poprawIteracyjnie(sredniaKwadratowObserwacji[stan][akcja], (float) Math.pow(wzmocnienie, 2), wspolczynnikZmiany);
+	public double poprawSrednia(int stan, int akcja, double wzmocnienie, double wspolczynnikZmiany ) {
 		return (sredniaObserwacji[stan][akcja] = poprawIteracyjnie(sredniaObserwacji[stan][akcja], wzmocnienie, wspolczynnikZmiany));
+	}
+	
+	/** 
+	 * Metoda poprawia średnią kwadratów używaną do detekcji anomalii
+	 * @param stan 
+	 * @param akcja
+	 * @param wzmocnienie Nowa wartosć wzmocnienia
+	 */
+	private void poprawSredniaKwadratow(int stan, int akcja, double wzmocnienie){
+		double wspolczynnikZmiany =  Math.max(1/(float)(poprawkiObserwacji[stan][akcja]), min_poprawa);
+		sredniaKwadratowObserwacji[stan][akcja] = poprawIteracyjnie(sredniaKwadratowObserwacji[stan][akcja], (float) Math.pow(wzmocnienie, 2), wspolczynnikZmiany);
 	}
 	
 	/**
@@ -197,7 +213,7 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 * @param wspolczynnikZmiany - Współczynnik poprawy dla kalkulacji wartości średniej 
 	 * @return Nowa wartość średnia
 	 */
-	protected float poprawIteracyjnie(float staraSrednia, float nowaWartosc, float wspolczynnikZmiany) {
+	protected double poprawIteracyjnie(double staraSrednia, double nowaWartosc, double wspolczynnikZmiany) {
 		return staraSrednia + wspolczynnikZmiany *(nowaWartosc - staraSrednia);
 	}
 	
@@ -206,7 +222,7 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 * @param akcja - numer kolejki do ktorej chcemy przelaczyc sterowanie 
 	 * @return
 	 */
-	public float getWartosc(int stan, int akcja) {
+	public double getWartosc(int stan, int akcja) {
 		return wartosci[stan][akcja];
 	}
 
@@ -217,12 +233,12 @@ public class FunkcjaWartosciAkcji extends FunkcjaWartosci {
 	 * @param akcja
 	 * @param wartosc
 	 */
-	public void setWartosc(int stan, int akcja, float wartosc) {
+	public void setWartosc(int stan, int akcja, double wartosc) {
 		wartosci[stan][akcja] = wartosc;
 		poprawki[stan][akcja] = 0;
 	}
 
-	public float addWartosc(int stan, int akcja, float wartosc) {
+	public double addWartosc(int stan, int akcja, float wartosc) {
 		wartosci[stan][akcja] += wartosc;
 		return wartosci[stan][akcja];
 	}

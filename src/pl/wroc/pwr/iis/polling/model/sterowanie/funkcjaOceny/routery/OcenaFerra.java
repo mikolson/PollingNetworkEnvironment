@@ -7,40 +7,33 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.FunkcjaOceny_I;
 import pl.wroc.pwr.iis.polling.model.sterowanie.funkcjaOceny.OcenaSytuacji_A;
 
 /**
- * Ocena Rtime to ocena ktora uwzglednia:
+ * Ocena zgodna z funkcją oceny podaną przez Ferrę
  * 
  * @author Misiek
  */
-public class OcenaTimeRosnacoOrginalna extends OcenaSytuacji_A implements FunkcjaOceny_I {
-	// Zapisany poprzedni stan 
-	
-	// Parametry oceny
+public class OcenaFerra extends OcenaSytuacji_A implements FunkcjaOceny_I {
 	protected final float c1; //
 	protected final float c2; //
 	protected final float c3; // 
-
 	private int[] poprzedniStan = new int[0];
 
-	public OcenaTimeRosnacoOrginalna(float C1, float C2, float C3) {
+	public OcenaFerra(float C1, float C2, float C3) {
 		c1 = C1;
 		c2 = C2;
 		c3 = C3;
 	}
 
-	/* 
-	 * Średnia ważona ilości zgłoszeń
-	 * @see pl.wroc.pwr.iis.polling.model.ocena.ModulOceniajacy#ocenaSytuacji(pl.wroc.pwr.iis.polling.model.object.Serwer)
+	/** 
+	 * @return Średnia ważona ilości zgłoszeń
 	 */
 	public double ocenaSytuacji(Serwer serwer) {
 		float r_time = 0;
-		
 		for (int i = 0; i < serwer.getIloscKolejek() - 1; i++) {
 			Kolejka kolejka = serwer.getKolejka(i);
 			
 			double r_time_i = 0; 
-			double R =  kolejka.getMaxCzasOczekiwania();
+			double  R =  kolejka.getMaxCzasOczekiwania();
 			double M = kolejka.getSredniCzasOczekiwania();
-//			float M = kolejka.getCzasOczekiwania();
 			
 			if(M <= R) {
 				r_time_i = (c1 * M) /R;

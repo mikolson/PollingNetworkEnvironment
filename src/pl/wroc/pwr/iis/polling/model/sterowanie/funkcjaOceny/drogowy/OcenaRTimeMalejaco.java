@@ -31,15 +31,15 @@ public class OcenaRTimeMalejaco extends OcenaSytuacji_A implements FunkcjaOceny_
 	 * Średnia ważona ilości zgłoszeń
 	 * @see pl.wroc.pwr.iis.polling.model.ocena.ModulOceniajacy#ocenaSytuacji(pl.wroc.pwr.iis.polling.model.object.Serwer)
 	 */
-	public float ocenaSytuacji(Serwer serwer) {
-		float r_time = 0;
+	public double ocenaSytuacji(Serwer serwer) {
+		double r_time = 0;
 		
 		for (int i = 0; i < serwer.getIloscKolejek(); i++) {
 			Kolejka kolejka = serwer.getKolejka(i);
 			
-			float r_time_i = 0; 
-			int R =  kolejka.getMaxCzasOczekiwania();
-			float M = kolejka.getSredniCzasOczekiwania();
+			double r_time_i = 0; 
+			double R =  kolejka.getMaxCzasOczekiwania();
+			double M = kolejka.getSredniCzasOczekiwania();
 			
 			if(M <= R) {
 				r_time_i = c1 * (R-M)/R;
@@ -51,7 +51,7 @@ public class OcenaRTimeMalejaco extends OcenaSytuacji_A implements FunkcjaOceny_
 			r_time += r_time_i * W;
 		}
 		
-		float r_stan = getR_stan(serwer);
+		double r_stan = getR_stan(serwer);
 		
 		//Zapisanie stanu
 		this.poprzedniStan = serwer.getReprezentacjaStanu().getStan(serwer);

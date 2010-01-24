@@ -19,10 +19,10 @@ public abstract class OcenaSytuacji_A {
 	 * @param kolejka
 	 * @return
 	 */
-	protected float doliczKare(Kolejka kolejka) {
-		float result = 0;
-		int czas = kolejka.getCzasOczekiwania();
-		int max = kolejka.getMaxCzasOczekiwania();
+	protected double doliczKare(Kolejka kolejka) {
+		double result = 0;
+		double czas = kolejka.getCzasOczekiwania();
+		double max = kolejka.getMaxCzasOczekiwania();
 	
 		if (czas - max < 0) {
 			result = (czas-max) * kara * kolejka.getWaga();

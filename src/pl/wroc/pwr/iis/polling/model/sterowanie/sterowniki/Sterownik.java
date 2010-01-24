@@ -9,7 +9,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.Sterownik_I;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 
 /**
- * @author Misiek
+ * @author Michał Stanek
  */
 public abstract class Sterownik implements Sterownik_I {
 	protected final Strategia_A strategia;
@@ -37,5 +37,14 @@ public abstract class Sterownik implements Sterownik_I {
 
 	public int startSterowania() {
 		return 0;
+	}
+	
+	@Override
+	public String toString() {
+		return "";
+	}
+	
+	public String toStringHeader() {
+		return "Brak naglowka";
 	}
 }

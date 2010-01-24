@@ -10,32 +10,27 @@ package pl.wroc.pwr.iis.polling.model.object.polling;
 
 import java.util.List;
 
-import pl.wroc.pwr.iis.rozklady.IRozkladPrawdopodobienstwa;
-
+import pl.wroc.pwr.iis.rozklady.IRozkladCiagly;
+import pl.wroc.pwr.iis.rozklady.IRozkladDyskretny;
 
 /**
- *
- * @author Misiek
+ * @author Michał Stanek <michal.stanek@pwr.wroc.pl>
  */
 public class Wlasciwosci {
 	public static final int BRAK_OGRANICZENIA_ZGLOSZEN = -1;
 	public static final int BRAK_OGRANICZENIA_CZASOWEGO = -1;
-	
 	public static final int BRAK_WAGI = -1;
 	
-    protected IRozkladPrawdopodobienstwa rozkladCzasuPrzybyc;
-    protected IRozkladPrawdopodobienstwa rozkladCzasuObslugi;
-    protected IRozkladPrawdopodobienstwa rozkladCzasuNastawy;
+    protected IRozkladDyskretny rozkladCzasuPrzybyc;
+    protected IRozkladCiagly rozkladCzasuObslugi;
+    protected IRozkladCiagly rozkladCzasuNastawy;
     
     protected int maxZgloszen = BRAK_OGRANICZENIA_ZGLOSZEN;
-    
     protected float waga = 1f;
     protected String nazwa;
     
     protected List<Polaczenie> polaczeniaWychodzace = null;
-
-    // Ograniczenia
-    protected int maxCzasOczekiwania = BRAK_OGRANICZENIA_CZASOWEGO; //
+    protected double maxCzasOczekiwania = BRAK_OGRANICZENIA_CZASOWEGO; 
 
     public Wlasciwosci() {
     }
@@ -52,27 +47,27 @@ public class Wlasciwosci {
 		this.nazwa = nazwa;
 	}
 
-	public IRozkladPrawdopodobienstwa getRozkladCzasuObslugi() {
+	public IRozkladCiagly getRozkladCzasuObslugi() {
         return rozkladCzasuObslugi;
     }
 
-    public void setRozkladIlosciObslug(IRozkladPrawdopodobienstwa rozkladCzasuObslugi) {
+    public void setRozkladCzasuObslugi(IRozkladCiagly rozkladCzasuObslugi) {
         this.rozkladCzasuObslugi = rozkladCzasuObslugi;
     }
 
-    public IRozkladPrawdopodobienstwa getRozkladCzasuPrzybyc() {
+    public IRozkladDyskretny getRozkladCzasuPrzybyc() {
         return rozkladCzasuPrzybyc;
     }
 
-    public void setRozkladIlosciPrzybyc(IRozkladPrawdopodobienstwa rozkladCzasuPrzybyc) {
+    public void setRozkladIlosciPrzybyc(IRozkladDyskretny rozkladCzasuPrzybyc) {
         this.rozkladCzasuPrzybyc = rozkladCzasuPrzybyc;
     }
     
-    public IRozkladPrawdopodobienstwa getRozkladCzasuNastawy() {
+    public IRozkladCiagly getRozkladCzasuNastawy() {
 		return rozkladCzasuNastawy;
 	}
 
-	public void setRozkladCzasuNastawy(IRozkladPrawdopodobienstwa rozkladCzasuNastawy) {
+	public void setRozkladCzasuNastawy(IRozkladCiagly rozkladCzasuNastawy) {
 		this.rozkladCzasuNastawy = rozkladCzasuNastawy;
 	}
 
@@ -92,7 +87,7 @@ public class Wlasciwosci {
      *  
      * @return Czas oczekiwania w kolejce
      */
-    public int getMaxCzasOczekiwania() {
+    public double getMaxCzasOczekiwania() {
         return maxCzasOczekiwania;
     }
 
@@ -124,9 +119,9 @@ public class Wlasciwosci {
 	 * @param serwera Rozkład czasu przybyć serwera
 	 * @return Ilość nowych zgłoszeń
 	 */
-	protected int getIloscWylosowanych(IRozkladPrawdopodobienstwa kolejki, IRozkladPrawdopodobienstwa serwera) {
-		IRozkladPrawdopodobienstwa rKolejki = kolejki;
-		IRozkladPrawdopodobienstwa rSerwera = serwera;
+	protected int losuj(IRozkladDyskretny kolejki, IRozkladDyskretny serwera, double kwantCzasu) {
+		IRozkladDyskretny rKolejki = kolejki;
+		IRozkladDyskretny rSerwera = serwera;
 
 		int result;
 
@@ -138,8 +133,27 @@ public class Wlasciwosci {
 			assert true;
 		}
 
-		result = (int) rKolejki.losuj();
+		
+		result = rKolejki.losuj(kwantCzasu);
+		return result;
+	}
+	
+	
+	protected double losuj(IRozkladCiagly kolejki, IRozkladCiagly serwera) {
+		IRozkladCiagly rKolejki = kolejki;
+		IRozkladCiagly rSerwera = serwera;
+		double result;
 
+		if (rKolejki == null && rSerwera != null) {
+			rKolejki = rSerwera;
+		}
+		
+		if (rKolejki == null){
+			assert true;
+		}
+		
+		
+		result = rKolejki.losuj();
 		return result;
 	}
 }

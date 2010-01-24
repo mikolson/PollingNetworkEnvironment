@@ -9,16 +9,15 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.funkcjaWartosci.FunkcjaWartosciA
 import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Sterownik;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 
-
 /**
- * @author Misiek
+ * @author Michał Stanek
  */
 public class SarsaOnPolicy extends Sterownik {
 private static final int BRAK_USTAWIONEJ_WARTOSCI = -1;
 	
-	protected int 	poprzedniaAkcja = BRAK_USTAWIONEJ_WARTOSCI;
-	protected int 	poprzedniStan = BRAK_USTAWIONEJ_WARTOSCI;
-    protected float poprzednieWzmocnienie = BRAK_USTAWIONEJ_WARTOSCI;
+	protected int		poprzedniaAkcja = BRAK_USTAWIONEJ_WARTOSCI;
+	protected int		poprzedniStan = BRAK_USTAWIONEJ_WARTOSCI;
+    protected double	poprzednieWzmocnienie = BRAK_USTAWIONEJ_WARTOSCI;
 	
     /**
      * Tablica zawierajaca wartosci Q(x,a)
@@ -36,7 +35,7 @@ private static final int BRAK_USTAWIONEJ_WARTOSCI = -1;
 	}
 
 	@Override
-	public int getDecyzjaSterujaca(float ocenaStanu, int[] stan, int iloscAkcji) {
+	public int getDecyzjaSterujaca(double ocenaStanu, int[] stan, int iloscAkcji) {
 		/*
 		 * Po przejsciu do kolejnego stanu nalezy poprawić informacje o stanie
 		 * w którym byliśmy 
@@ -45,11 +44,11 @@ private static final int BRAK_USTAWIONEJ_WARTOSCI = -1;
 		 
 		 if (poprzedniStan != BRAK_USTAWIONEJ_WARTOSCI) { // poprawa następuje tylko wtedy kiedy był poprzedni stan 
 			 //Wartość Q dla poprzedniego stanu
-			 float Q_s_a = Q.getWartosc(poprzedniStan, poprzedniaAkcja);
-			 float r = ocenaStanu;
+			 double Q_s_a = Q.getWartosc(poprzedniStan, poprzedniaAkcja);
+			 double r = ocenaStanu;
 			 // Max wartosc Q w biezacym stanie
-			 float Q_sn_a = Q.getWartosc(strategia.getNumerStanu(stan), wybranaAkcja);
-			 float nowaWartoscQ = Q_s_a + alfa * (r + dyskont * Q_sn_a - Q_s_a);
+			 double Q_sn_a = Q.getWartosc(strategia.getNumerStanu(stan), wybranaAkcja);
+			 double nowaWartoscQ = Q_s_a + alfa * (r + dyskont * Q_sn_a - Q_s_a);
 
 			 // Ustawienie nowej wartośći akcji
 			 Q.setWartosc(poprzedniStan, poprzedniaAkcja, nowaWartoscQ);

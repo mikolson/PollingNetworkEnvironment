@@ -61,7 +61,6 @@ public class QLearningModele extends QLearningWariancja {
 			model[aktualnyModel].poprawObserwacje(prevStan,prevAkcja,r);
 			 // Liczone po otrzy
 
-		     boolean zmianaModelu = false;
 		     int numerNajlepszegoModelu = aktualnyModel;
 			 double najlepszyModel = 0; // wsp Wiarygodnosci najlepszego modelu
 			 // Sprawdzenie czy dla danego modelu można wogóle zrobić porównanie statystyczne
@@ -69,8 +68,8 @@ public class QLearningModele extends QLearningWariancja {
 					 && strategia.czyStabilna()) {
 				 // Ustalenie stopnia wiarygodności aktualnego odczytu dla kazdego z modeli
 				 for (int i = 0; i < wykorzystanychModeli; i++) {
-					float delta = odlegloscObserwacji(model[i], prevStan, prevAkcja, r);
-					float granicaOdchylenia = granicaOdchylenieObserwacji(model[i], prevStan, prevAkcja);
+					double delta = odlegloscObserwacji(model[i], prevStan, prevAkcja, r);
+					double granicaOdchylenia = granicaOdchylenieObserwacji(model[i], prevStan, prevAkcja);
 					float korekta = 0;
 					if (delta <= granicaOdchylenia) {
 //						korekta = (float) (-Math.pow(delta,2)/(Math.pow(granicaOdchylenia, 2)) + 1);
@@ -83,13 +82,10 @@ public class QLearningModele extends QLearningWariancja {
 //					wiarygodnoscModelu[i] = wiarygodnoscModelu[i] - WSP_KOREKTY_MODELI*(korekta - wiarygodnoscModelu[i]);
 					wiarygodnoscModelu[i] = Math.max(0, Math.min(1, wiarygodnoscModelu[i] +  WSP_KOREKTY_MODELI*(korekta)));
 					
-					// Korekta najlepszego modelu
-					zmianaModelu= false;
 					if (wiarygodnoscModelu[i]-0.001 > najlepszyModel) {
 						najlepszyModel = wiarygodnoscModelu[i];
 						if (aktualnyModel != i) { // Sprawdzenie czy nastąpiła zmiana modeli
 							numerNajlepszegoModelu = i;
-							zmianaModelu = true;
 						} 
 					}
 					
@@ -131,8 +127,8 @@ public class QLearningModele extends QLearningWariancja {
 			 poprawParametry(model[aktualnyModel]);
 			 
 			 // Max wartosc Q w biezacym stanie
-			 float maxQ_sn_a = model[aktualnyModel].getMaxAkcja(aktStan, iloscAkcji).wartosc;
-			 float nowaWartoscQ = r + currentDyskont * maxQ_sn_a;	 
+			 double maxQ_sn_a = model[aktualnyModel].getMaxAkcja(aktStan, iloscAkcji).wartosc;
+			 double nowaWartoscQ = r + currentDyskont * maxQ_sn_a;	 
 			 model[aktualnyModel].poprawWartosc(prevStan, prevAkcja, nowaWartoscQ);
 			 
 //			 float maxQ_sn_a = Q.getMaxAkcja(aktStan, iloscAkcji).wartosc;

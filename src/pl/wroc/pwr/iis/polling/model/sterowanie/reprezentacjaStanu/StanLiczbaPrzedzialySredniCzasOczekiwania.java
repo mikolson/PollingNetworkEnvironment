@@ -34,10 +34,10 @@ public class StanLiczbaPrzedzialySredniCzasOczekiwania implements IStan {
 		int[] result = new int[serwer.getIloscKolejek()];
 		
 		for (int i = 0; i < result.length; i++) {
-			int maxCzasOczekiwania = serwer.getKolejka(i).getMaxCzasOczekiwania();
-			float sredniCzasOczekiwania = serwer.getKolejka(i).getSredniCzasOczekiwania();
+			double maxCzasOczekiwania = serwer.getKolejka(i).getMaxCzasOczekiwania();
+			double sredniCzasOczekiwania = serwer.getKolejka(i).getSredniCzasOczekiwania();
 			
-			float dlugoscPrzedzialu = (float)maxCzasOczekiwania / (float)liczbaPrzedzialow;
+			double dlugoscPrzedzialu = maxCzasOczekiwania / liczbaPrzedzialow;
 			
 			int przedzial = liczbaPrzedzialow;
 			

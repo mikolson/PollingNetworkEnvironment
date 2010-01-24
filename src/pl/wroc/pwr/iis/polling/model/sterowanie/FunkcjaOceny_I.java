@@ -13,5 +13,5 @@ public interface FunkcjaOceny_I {
 	 * @param s
 	 * @return
 	 */
-	float ocenaSytuacji(Serwer serwer);
+	double ocenaSytuacji(Serwer serwer);
 }	
