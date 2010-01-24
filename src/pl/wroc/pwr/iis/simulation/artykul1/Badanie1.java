@@ -11,7 +11,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Qlearning.QLearning;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaSoftMax;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 import pl.wroc.pwr.iis.rozklady.RozkladBernouliego;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladJednostajnyDyskretny;
 import pl.wroc.pwr.iis.simulation.Badanie2Metod;
 
 public class Badanie1 extends Badanie2Metod {
@@ -41,13 +41,13 @@ public class Badanie1 extends Badanie2Metod {
     	serwerBadania.getKolejka(2).setMaxCzasOczekiwania(Integer.MAX_VALUE);
     	
     	// Serwer za kazdym razem obsluguje tylko jedno zgloszenie
-    	serwerBadania.setRozkladIlosciObslug(new RozkladJednostajny(1)); 
+    	serwerBadania.setRozkladCzasuObslugi(new RozkladJednostajnyDyskretny(1)); 
 //    	serwer1.setRozkladIlosciPrzybyc(new RozkladRownomierny(0,3));
     		serwerBadania.getKolejka(0).setRozkladIlosciPrzybyc(new RozkladBernouliego(30));
     		serwerBadania.getKolejka(1).setRozkladIlosciPrzybyc(new RozkladBernouliego(25));
     		serwerBadania.getKolejka(2).setRozkladIlosciPrzybyc(new RozkladBernouliego(65));
     		
-    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajnyDyskretny(0));
     	serwerBadania.setWaga(1);
 	}
 

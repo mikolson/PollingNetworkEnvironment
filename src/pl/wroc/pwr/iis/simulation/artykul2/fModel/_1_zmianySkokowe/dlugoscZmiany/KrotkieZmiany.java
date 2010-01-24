@@ -11,7 +11,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Qlearning.QLearningWa
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaSoftMax;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 import pl.wroc.pwr.iis.rozklady.RozkladBernouliego;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladJednostajnyDyskretny;
 import pl.wroc.pwr.iis.rozklady.random.RandomGenerator;
 import pl.wroc.pwr.iis.simulation.Badanie2Metod;
 
@@ -41,7 +41,7 @@ public class KrotkieZmiany extends Badanie2Metod {
 
 	
 	public KrotkieZmiany() {
-		int iloscCykli = 30000; 
+		int iloscCykli = 10000; 
 		int zmianaCyklu = 800;
 		serwerMetoda1 = new Serwer("Serwer 1",3);
 		serwerMetoda2 = new Serwer("Serwer 2",3);
@@ -54,7 +54,7 @@ public class KrotkieZmiany extends Badanie2Metod {
 	
 	@Override
 	protected void konfiguracjaGeneratoraLiczb() {
-		RandomGenerator.setDefaultSeed(11232221);
+		RandomGenerator.setDefaultSeed(2221);
 	}	
 	
 	protected void ustawIteracje(Serwer serwerBadania, int iteracja) {
@@ -85,12 +85,12 @@ public class KrotkieZmiany extends Badanie2Metod {
     	
     	// Serwer za kazdym razem obsluguje tylko jedno zgloszenie
     	for (int i = 0; i < serwerBadania.getIloscKolejek(); i++) {
-    		serwerBadania.getKolejka(i).setRozkladIlosciObslug(new RozkladJednostajny(1));
+    		serwerBadania.getKolejka(i).setRozkladCzasuObslugi(new RozkladJednostajnyDyskretny(1));
     		serwerBadania.getKolejka(i).setMaxCzasOczekiwania(maxCzasyOczekiwania[i]);
     		serwerBadania.getKolejka(i).setRozkladIlosciPrzybyc(new RozkladBernouliego(intentywnosciNaplywu[i]));
 		}
     	
-    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajnyDyskretny(0));
     	serwerBadania.setWaga(1);
 	}
 	

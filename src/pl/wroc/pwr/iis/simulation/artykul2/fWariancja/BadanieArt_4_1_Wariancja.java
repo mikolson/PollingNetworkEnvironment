@@ -11,8 +11,8 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Qlearning.QLearningWa
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaSoftMax;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 import pl.wroc.pwr.iis.rozklady.RozkladBernouliego;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
-import pl.wroc.pwr.iis.rozklady.RozkladPoissona;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladJednostajnyDyskretny;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladPoissona;
 import pl.wroc.pwr.iis.rozklady.random.RandomGenerator;
 import pl.wroc.pwr.iis.simulation.Badanie2Metod;
 
@@ -66,18 +66,18 @@ public class BadanieArt_4_1_Wariancja extends Badanie2Metod {
 		} else if (iteracja == iteracjaZmiany3) {
 			for (int i = 0; i < serwerBadania.getIloscKolejek(); i++) {
 				serwerBadania.getKolejka(i).setRozkladIlosciPrzybyc(new RozkladPoissona(intentywnosciNaplywu3[i]));
-				serwerBadania.getKolejka(i).setRozkladIlosciObslug(new RozkladPoissona(10));
+				serwerBadania.getKolejka(i).setRozkladCzasuObslugi(new RozkladPoissona(10));
 				serwerBadania.getKolejka(i).setMaxCzasOczekiwania(maxCzasyOczekiwania3[i]);
 			}
 		} else if (iteracja == iteracjaZmiany4) {
 			for (int i = 0; i < serwerBadania.getIloscKolejek(); i++) {
 				serwerBadania.getKolejka(i).setRozkladIlosciPrzybyc(new RozkladPoissona(intentywnosciNaplywu4[i]));
-				serwerBadania.getKolejka(i).setRozkladIlosciObslug(new RozkladPoissona(12));
+				serwerBadania.getKolejka(i).setRozkladCzasuObslugi(new RozkladPoissona(12));
 				serwerBadania.getKolejka(i).setMaxCzasOczekiwania(maxCzasyOczekiwania4[i]);
 			}
 		} else if (iteracja == iteracjaZmiany5) {
 			for (int i = 0; i < serwerBadania.getIloscKolejek(); i++) {
-				serwerBadania.getKolejka(i).setRozkladIlosciObslug(new RozkladPoissona(30));
+				serwerBadania.getKolejka(i).setRozkladCzasuObslugi(new RozkladPoissona(30));
 				serwerBadania.setRozkladCzasuNastawy(new RozkladBernouliego(40));
 			}
 		}
@@ -88,12 +88,12 @@ public class BadanieArt_4_1_Wariancja extends Badanie2Metod {
     	
     	// Serwer za kazdym razem obsluguje tylko jedno zgloszenie
     	for (int i = 0; i < serwerBadania.getIloscKolejek(); i++) {
-    		serwerBadania.getKolejka(i).setRozkladIlosciObslug(new RozkladJednostajny(1));
+    		serwerBadania.getKolejka(i).setRozkladCzasuObslugi(new RozkladJednostajnyDyskretny(1));
     		serwerBadania.getKolejka(i).setMaxCzasOczekiwania(maxCzasyOczekiwania[i]);
     		serwerBadania.getKolejka(i).setRozkladIlosciPrzybyc(new RozkladBernouliego(intentywnosciNaplywu[i]));
 		}
     	
-    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajnyDyskretny(0));
     	serwerBadania.setWaga(1);
 	}
 	

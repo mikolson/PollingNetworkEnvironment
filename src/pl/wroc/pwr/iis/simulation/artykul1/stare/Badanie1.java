@@ -21,7 +21,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaEZachlannaDyn
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaSoftMax;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 import pl.wroc.pwr.iis.rozklady.RozkladBernouliego;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladJednostajnyDyskretny;
 import pl.wroc.pwr.iis.rozklady.random.RandomGenerator;
 import sun.misc.GC;
 
@@ -43,13 +43,13 @@ public class Badanie1 {
     	serwer1.getKolejka(2).setMaxCzasOczekiwania(Integer.MAX_VALUE);
     	
     	// Serwer za kazdym razem obsluguje tylko jedno zgloszenie
-    	serwer1.setRozkladIlosciObslug(new RozkladJednostajny(1)); 
+    	serwer1.setRozkladCzasuObslugi(new RozkladJednostajnyDyskretny(1)); 
 //    	serwer1.setRozkladIlosciPrzybyc(new RozkladRownomierny(0,3));
     		serwer1.getKolejka(0).setRozkladIlosciPrzybyc(new RozkladBernouliego(30));
     		serwer1.getKolejka(1).setRozkladIlosciPrzybyc(new RozkladBernouliego(25));
     		serwer1.getKolejka(2).setRozkladIlosciPrzybyc(new RozkladBernouliego(60));
     		
-    	serwer1.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwer1.setRozkladCzasuNastawy(new RozkladJednostajnyDyskretny(0));
     	serwer1.setWaga(1);
     	
 	   	float c1 = 50;

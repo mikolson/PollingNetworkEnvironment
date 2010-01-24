@@ -16,7 +16,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Qlearning.SarsaOnPoli
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaEZachlanna;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 import pl.wroc.pwr.iis.rozklady.RozkladBernouliego;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladJednostajnyDyskretny;
 
 /**
  *
@@ -39,7 +39,7 @@ public class Badanie3 {
     	serwer1.getKolejka(5).setMaxCzasOczekiwania(Integer.MAX_VALUE);
     	
     	// Serwer za kazdym razem obsluguje tylko jedno zgloszenie
-    	serwer1.setRozkladIlosciObslug(new RozkladJednostajny(1)); 
+    	serwer1.setRozkladCzasuObslugi(new RozkladJednostajnyDyskretny(1)); 
 //    	serwer1.setRozkladIlosciPrzybyc(new RozkladRownomierny(0,3));
     		serwer1.getKolejka(0).setRozkladIlosciPrzybyc(new RozkladBernouliego(15));
     		serwer1.getKolejka(1).setRozkladIlosciPrzybyc(new RozkladBernouliego(15));
@@ -48,7 +48,7 @@ public class Badanie3 {
     		serwer1.getKolejka(4).setRozkladIlosciPrzybyc(new RozkladBernouliego(10));
     		serwer1.getKolejka(5).setRozkladIlosciPrzybyc(new RozkladBernouliego(25));
     		
-    	serwer1.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwer1.setRozkladCzasuNastawy(new RozkladJednostajnyDyskretny(0));
     	serwer1.setWaga(1);
     	
 	   	float c1 = 50;

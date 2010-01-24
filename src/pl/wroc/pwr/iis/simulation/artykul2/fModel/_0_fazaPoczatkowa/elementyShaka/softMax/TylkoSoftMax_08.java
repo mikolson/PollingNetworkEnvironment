@@ -11,7 +11,7 @@ import pl.wroc.pwr.iis.polling.model.sterowanie.sterowniki.Qlearning.QLearningWa
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.StrategiaSoftMax;
 import pl.wroc.pwr.iis.polling.model.sterowanie.strategie.Strategia_A;
 import pl.wroc.pwr.iis.rozklady.RozkladBernouliego;
-import pl.wroc.pwr.iis.rozklady.RozkladJednostajny;
+import pl.wroc.pwr.iis.rozklady.dyskretne.RozkladJednostajnyDyskretny;
 import pl.wroc.pwr.iis.rozklady.random.RandomGenerator;
 import pl.wroc.pwr.iis.simulation.Badanie2Metod;
 
@@ -88,12 +88,12 @@ public class TylkoSoftMax_08 extends Badanie2Metod {
     	
     	// Serwer za kazdym razem obsluguje tylko jedno zgloszenie
     	for (int i = 0; i < serwerBadania.getIloscKolejek(); i++) {
-    		serwerBadania.getKolejka(i).setRozkladIlosciObslug(new RozkladJednostajny(1));
+    		serwerBadania.getKolejka(i).setRozkladCzasuObslugi(new RozkladJednostajnyDyskretny(1));
     		serwerBadania.getKolejka(i).setMaxCzasOczekiwania(maxCzasyOczekiwania[i]);
     		serwerBadania.getKolejka(i).setRozkladIlosciPrzybyc(new RozkladBernouliego(intentywnosciNaplywu[i]));
 		}
     	
-    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajny(0));
+    	serwerBadania.setRozkladCzasuNastawy(new RozkladJednostajnyDyskretny(0));
     	serwerBadania.setWaga(1);
 	}
 	
